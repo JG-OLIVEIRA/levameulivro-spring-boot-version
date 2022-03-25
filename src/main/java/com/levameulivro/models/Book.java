@@ -10,7 +10,7 @@ public class Book {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String bookName;
     private String author;
 
     @Override
@@ -47,18 +47,18 @@ public class Book {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getAuthor() {
         return author;
     }
-    
+
     public void setAuthor(String author) {
         this.author = author;
     }
