@@ -4,6 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.levameulivro.models.User;
+import com.levameulivro.repository.UserRepository;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -35,7 +36,16 @@ public class UserForm {
         this.password = password;
     }
 
-    public User converter() {
+    public User convert() {
         return new User(username, email, password);
+    }
+
+    public User update(Long id, UserRepository userRepository){
+        User user = userRepository.getById(id);
+        user.setUsername(this.username);
+        user.setEmail(email);
+        user.setPassword(this.email);
+
+        return user;
     }
 }

@@ -12,7 +12,7 @@ public class UserDetailDto {
     public UserDetailDto(User user){
         this.id = user.getId();
         this.username = user.getUsername();
-        this.email = user.getPassword();
+        this.email = user.getEmail();
         this.password = user.getPassword();
     }
 
@@ -43,6 +43,5 @@ public class UserDetailDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
     
 }
