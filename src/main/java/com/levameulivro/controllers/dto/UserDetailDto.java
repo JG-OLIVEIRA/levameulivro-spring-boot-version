@@ -1,20 +1,19 @@
 package com.levameulivro.controllers.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.levameulivro.models.User;
 
-public class UserDto {
+public class UserDetailDto {
     
     private Long id;
     private String username;
     private String email;
+    private String password;
 
-    public UserDto(User user){
+    public UserDetailDto(User user){
         this.id = user.getId();
         this.username = user.getUsername();
-        this.email = user.getUsername();
+        this.email = user.getPassword();
+        this.password = user.getPassword();
     }
 
     public Long getId(){
@@ -37,7 +36,13 @@ public class UserDto {
         this.email = email;
     }
 
-    public static List<UserDto> converter(List<User> user) {
-        return user.stream().map(UserDto::new).collect(Collectors.toList());
+    public String getPassword() {
+        return password;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    
 }
