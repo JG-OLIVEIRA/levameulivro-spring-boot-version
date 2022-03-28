@@ -14,7 +14,7 @@ public class UserForm {
     private String username;
     @NotNull @NotEmpty
     private String email;
-    @NotNull @NotEmpty @Length(min = 5)
+    @NotNull @NotEmpty @Length(min = 8)
     private String password;
 
     public String getUsername() {
