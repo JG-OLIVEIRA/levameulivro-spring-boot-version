@@ -12,9 +12,19 @@ public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private User username;
+    private User ownername;
     private String bookname;
     private String author;
+
+    public Book(){
+
+    }
+
+    public Book(User ownername, String bookname, String author){
+        this.ownername = ownername;
+        this.bookname = bookname;
+        this.author = author;
+    }
 
     @Override
 	public int hashCode() {
@@ -50,12 +60,12 @@ public class Book {
         this.id = id;
     }
 
-    public User getUsername() {
-        return username;
+    public User getOwnername() {
+        return ownername;
     }
 
-    public void setUsername(User username) {
-        this.username = username;
+    public void setOwnername(User ownername) {
+        this.ownername = ownername;
     }
 
     public String getBookname() {

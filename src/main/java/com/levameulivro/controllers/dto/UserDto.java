@@ -8,25 +8,29 @@ import com.levameulivro.models.User;
 public class UserDto {
     
     private Long id;
-    private String username;
+    private String name;
     private String email;
 
     public UserDto(User user){
         this.id = user.getId();
-        this.username = user.getUsername();
+        this.name = user.getName();
         this.email = user.getEmail();
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
