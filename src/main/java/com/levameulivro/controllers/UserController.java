@@ -9,7 +9,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.levameulivro.controllers.dto.UserDetailDto;
 import com.levameulivro.controllers.dto.UserDto;
 import com.levameulivro.form.UserForm;
 import com.levameulivro.repository.UserRepository;
@@ -41,10 +40,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetailDto> detail(@PathVariable Long id){
+    public ResponseEntity<UserDto> detail(@PathVariable Long id){
         Optional<User> optional = userRepository.findById(id);
         if(optional.isPresent()){
-            return ResponseEntity.ok(new UserDetailDto(optional.get()));
+            return ResponseEntity.ok(new UserDto(optional.get()));
         }
 
         return ResponseEntity.notFound().build();

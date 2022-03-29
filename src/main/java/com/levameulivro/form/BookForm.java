@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import com.levameulivro.models.Book;
 import com.levameulivro.models.User;
+import com.levameulivro.repository.BookRepository;
 import com.levameulivro.repository.UserRepository;
 
 import org.hibernate.validator.constraints.Length;
@@ -40,6 +41,16 @@ public class BookForm {
     public Book convert(UserRepository userRepository) {
         User username = userRepository.findByName(ownername);
         return new Book(username, bookname, author);
+    }
+
+    public Book update(Long id, BookRepository bookRepository, UserRepository userRepository){
+        Book book = bookRepository.getById(id);
+        User username = userRepository.findByName(ownername);
+        book.setBookname(bookname);
+        book.setOwnername(username);
+        book.setAuthor(author);
+
+        return book;
     }
 
 }
