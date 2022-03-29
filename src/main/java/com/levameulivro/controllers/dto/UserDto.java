@@ -37,7 +37,7 @@ public class UserDto {
         this.email = email;
     }
 
-    public static List<UserDto> converter(List<User> user) {
+    public static List<UserDto> convert(List<User> user) {
         return user.stream().map(UserDto::new).collect(Collectors.toList());
     }
 }

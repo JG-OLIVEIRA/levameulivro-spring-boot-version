@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping
     public List<UserDto> show(){
         List<User> users = userRepository.findAll();
-        return UserDto.converter(users);
+        return UserDto.convert(users);
     }
 
     @GetMapping("/{id}")
