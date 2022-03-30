@@ -12,7 +12,7 @@ public class Exchange {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Book nameBook;
+    private Book book;
     @ManyToOne
     private User recipient;
     
@@ -20,8 +20,8 @@ public class Exchange {
 
     }
 
-    public Exchange(Book name, User recipiente){
-        this.nameBook = name;
+    public Exchange(Book book, User recipiente){
+        this.book = book;
         this.recipient = recipiente;
     }
 
@@ -33,12 +33,12 @@ public class Exchange {
         this.id = id;
     }
 
-    public Book getNameBook() {
-        return nameBook;
+    public Book getBook() {
+        return book;
     }
 
-    public void setNameBook(Book nameBook) {
-        this.nameBook = nameBook;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public User getRecipient() {
