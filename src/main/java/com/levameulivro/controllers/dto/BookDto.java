@@ -4,22 +4,22 @@ import com.levameulivro.models.Book;
 
 public class BookDto {
     
-    private String ownername;
+    private String owner;
     private String bookname;
     private String author;
 
     public BookDto(Book book){
-        this.ownername = book.getOwnername().getName();
+        this.owner = book.getOwner().getName();
         this.bookname = book.getBookname();
         this.author = book.getAuthor();
     }
 
-    public String getOwnername() {
-        return ownername;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setOwnername(String ownername) {
-        this.ownername = ownername;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getBookname() {

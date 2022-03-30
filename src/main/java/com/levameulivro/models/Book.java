@@ -12,7 +12,7 @@ public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private User ownername;
+    private User owner;
     private String bookname;
     private String author;
 
@@ -20,8 +20,8 @@ public class Book {
 
     }
 
-    public Book(User ownername, String bookname, String author){
-        this.ownername = ownername;
+    public Book(User owner, String bookname, String author){
+        this.owner = owner;
         this.bookname = bookname;
         this.author = author;
     }
@@ -60,12 +60,12 @@ public class Book {
         this.id = id;
     }
 
-    public User getOwnername() {
-        return ownername;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setOwnername(User ownername) {
-        this.ownername = ownername;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public String getBookname() {

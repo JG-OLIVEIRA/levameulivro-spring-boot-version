@@ -22,32 +22,37 @@ public class BookForm {
     public String getOwnername() {
         return ownername;
     }
+
     public void setOwnername(String ownername) {
         this.ownername = ownername;
     }
+
     public String getBookname() {
         return bookname;
     }
+
     public void setBookname(String bookname) {
         this.bookname = bookname;
     }
+
     public String getAuthor() {
         return author;
     }
+
     public void setAuthor(String author) {
         this.author = author;
     }
 
     public Book convert(UserRepository userRepository) {
-        User username = userRepository.findByName(ownername);
-        return new Book(username, bookname, author);
+        User owner = userRepository.findByName(ownername);
+        return new Book(owner, bookname, author);
     }
 
     public Book update(Long id, BookRepository bookRepository, UserRepository userRepository){
         Book book = bookRepository.getById(id);
-        User username = userRepository.findByName(ownername);
+        User owner = userRepository.findByName(ownername);
         book.setBookname(bookname);
-        book.setOwnername(username);
+        book.setOwner(owner);
         book.setAuthor(author);
 
         return book;
