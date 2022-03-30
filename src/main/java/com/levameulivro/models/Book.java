@@ -13,16 +13,16 @@ public class Book {
     private Long id;
     @ManyToOne
     private User owner;
-    private String bookname;
+    private String name;
     private String author;
 
     public Book(){
 
     }
 
-    public Book(User owner, String bookname, String author){
+    public Book(User owner, String name, String author){
         this.owner = owner;
-        this.bookname = bookname;
+        this.name = name;
         this.author = author;
     }
 
@@ -68,12 +68,12 @@ public class Book {
         this.owner = owner;
     }
 
-    public String getBookname() {
-        return bookname;
+    public String getName() {
+        return name;
     }
 
-    public void setBookname(String bookname) {
-        this.bookname = bookname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuthor() {

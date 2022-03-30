@@ -5,12 +5,12 @@ import com.levameulivro.models.Book;
 public class BookDto {
     
     private String owner;
-    private String bookname;
+    private String name;
     private String author;
 
     public BookDto(Book book){
         this.owner = book.getOwner().getName();
-        this.bookname = book.getBookname();
+        this.name = book.getName();
         this.author = book.getAuthor();
     }
 
@@ -22,12 +22,12 @@ public class BookDto {
         this.owner = owner;
     }
 
-    public String getBookname() {
-        return bookname;
+    public String getName() {
+        return name;
     }
 
-    public void setBookname(String bookname) {
-        this.bookname = bookname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuthor() {

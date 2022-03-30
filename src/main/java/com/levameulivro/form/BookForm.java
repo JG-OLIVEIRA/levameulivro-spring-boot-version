@@ -15,7 +15,7 @@ public class BookForm {
     @NotNull @NotEmpty @Length(min = 8)
     private String ownername;
     @NotNull @NotEmpty @Length(min = 5)
-    private String bookname;
+    private String name;
     @NotNull @NotEmpty @Length(min = 5)
     private String author;
 
@@ -27,12 +27,12 @@ public class BookForm {
         this.ownername = ownername;
     }
 
-    public String getBookname() {
-        return bookname;
+    public String getName() {
+        return name;
     }
 
-    public void setBookname(String bookname) {
-        this.bookname = bookname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuthor() {
@@ -45,13 +45,13 @@ public class BookForm {
 
     public Book convert(UserRepository userRepository) {
         User owner = userRepository.findByName(ownername);
-        return new Book(owner, bookname, author);
+        return new Book(owner, name, author);
     }
 
     public Book update(Long id, BookRepository bookRepository, UserRepository userRepository){
         Book book = bookRepository.getById(id);
         User owner = userRepository.findByName(ownername);
-        book.setBookname(bookname);
+        book.setName(name);
         book.setOwner(owner);
         book.setAuthor(author);
 
