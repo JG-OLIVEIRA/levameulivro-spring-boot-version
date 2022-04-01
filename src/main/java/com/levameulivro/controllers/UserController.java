@@ -5,13 +5,14 @@ import com.levameulivro.models.User;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.levameulivro.controllers.dto.UserDto;
-import com.levameulivro.form.UserForm;
-import com.levameulivro.repository.UserRepository;
+import com.levameulivro.controllers.dto.UserRequestDTO;
+import com.levameulivro.controllers.dto.UserResponseDTO;
+import com.levameulivro.services.impl.UserServiceImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,51 +31,49 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
+    private UserServiceImp userServiceImp;
 
     @GetMapping
-    public List<UserDto> show(){
-        List<User> users = userRepository.findAll();
-        return UserDto.convert(users);
+    public List<UserResponseDTO> getAllUsers(){
+        List<User> users = userServiceImp.findAllUser();
+        return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> detail(@PathVariable Long id){
-        Optional<User> optional = userRepository.findById(id);
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
+        Optional<User> optional = userServiceImp.findUserById(id);
         if(optional.isPresent()){
-            return ResponseEntity.ok(new UserDto(optional.get()));
+            return ResponseEntity.ok(new UserResponseDTO(optional.get()));
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> add(@RequestBody @Valid UserForm form, UriComponentsBuilder uriBuilder){
-        User user = form.convert();
-        userRepository.save(user);
+    public ResponseEntity<UserRequestDTO> addUser(@RequestBody @Valid UserRequestDTO userDTO, UriComponentsBuilder uriBuilder){
+        User user = userServiceImp.createUser(userDTO);
 
         URI uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UserDto(user));
+        return ResponseEntity.created(uri).body(new UserRequestDTO(user));
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody @Valid UserForm form){
-        Optional<User> optional = userRepository.findById(id);
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userDTO){
+        Optional<User> optional = userServiceImp.findUserById(id);
         if(optional.isPresent()){
-            User user = form.update(id, userRepository);
-            return ResponseEntity.ok(new UserDto(user));
+            User user = userServiceImp.updateUser(id, userDTO);
+            return ResponseEntity.ok(new UserResponseDTO(user));
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> destroy(@PathVariable Long id){
-        Optional<User> optional = userRepository.findById(id);
+    public ResponseEntity<UserRequestDTO> destroy(@PathVariable Long id){
+        Optional<User> optional = userServiceImp.findUserById(id);
         if(optional.isPresent()){
-            userRepository.deleteById(id);
+            userServiceImp.deleteUserById(id);
             return ResponseEntity.ok().build();
         }
         

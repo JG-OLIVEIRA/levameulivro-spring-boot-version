@@ -1,28 +1,33 @@
-package com.levameulivro.form;
+package com.levameulivro.controllers.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.levameulivro.models.User;
-import com.levameulivro.repository.UserRepository;
 
 import org.hibernate.validator.constraints.Length;
 
-public class UserForm {
+public class UserRequestDTO {
     
-    @NotNull @NotEmpty @Length(min = 5)
+    @NotNull @NotEmpty @Length(min = 3)
     private String name;
     @NotNull @NotEmpty
     private String email;
     @NotNull @NotEmpty @Length(min = 8)
     private String password;
 
+    public UserRequestDTO(User user){
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(String username) {
-        this.name = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -41,16 +46,5 @@ public class UserForm {
         this.password = password;
     }
 
-    public User convert() {
-        return new User(name, email, password);
-    }
-
-    public User update(Long id, UserRepository userRepository){
-        User user = userRepository.getById(id);
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
-
-        return user;
-    }
+    
 }
