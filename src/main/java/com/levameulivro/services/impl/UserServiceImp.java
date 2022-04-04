@@ -23,8 +23,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(Long id){
-        Optional<User> user = userRepository.findById(id);
+    public Optional<User> findUserById(Long userId){
+        Optional<User> user = userRepository.findById(userId);
         return user;
     }
 
@@ -38,8 +38,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, UserRequestDTO userDTO){
-        Optional<User> optional = userRepository.findById(id);
+    public User updateUser(Long userId, UserRequestDTO userDTO){
+        Optional<User> optional = userRepository.findById(userId);
         if(optional.isPresent()){
             User user = optional.get();
             user.setEmail(userDTO.getEmail());
@@ -51,7 +51,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id){
-        userRepository.deleteById(id);
+    public void deleteUserById(Long userId){
+        userRepository.deleteById(userId);
     }
 }

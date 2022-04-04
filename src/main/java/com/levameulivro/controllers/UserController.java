@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
-        Optional<User> optional = userServiceImp.findUserById(id);
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId){
+        Optional<User> optional = userServiceImp.findUserById(userId);
         if(optional.isPresent()){
             return ResponseEntity.ok(new UserResponseDTO(optional.get()));
         }
@@ -59,10 +59,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userDTO){
-        Optional<User> optional = userServiceImp.findUserById(id);
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody @Valid UserRequestDTO userDTO){
+        Optional<User> optional = userServiceImp.findUserById(userId);
         if(optional.isPresent()){
-            User user = userServiceImp.updateUser(id, userDTO);
+            User user = userServiceImp.updateUser(userId, userDTO);
             return ResponseEntity.ok(new UserResponseDTO(user));
         }
 
@@ -70,10 +70,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserRequestDTO> destroy(@PathVariable Long id){
-        Optional<User> optional = userServiceImp.findUserById(id);
+    public ResponseEntity<UserRequestDTO> destroyUser(@PathVariable Long userId){
+        Optional<User> optional = userServiceImp.findUserById(userId);
         if(optional.isPresent()){
-            userServiceImp.deleteUserById(id);
+            userServiceImp.deleteUserById(userId);
             return ResponseEntity.ok().build();
         }
         

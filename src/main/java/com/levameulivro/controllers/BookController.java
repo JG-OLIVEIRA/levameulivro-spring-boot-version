@@ -1,14 +1,15 @@
 package com.levameulivro.controllers;
 
-import com.levameulivro.repository.UserRepository;
+import com.levameulivro.services.impl.BookServiceImp;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.levameulivro.controllers.dto.BookDto;
-import com.levameulivro.form.BookForm;
+import com.levameulivro.controllers.dto.BookRequestDTO;
+import com.levameulivro.controllers.dto.BookResponseDTO;
 import com.levameulivro.models.Book;
-import com.levameulivro.repository.BookRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -30,53 +31,49 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BookController {
     
     @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private BookServiceImp bookServiceImp;
 
     @GetMapping
-    public List<Book> show(){
-        List<Book> books = bookRepository.findAll();
-        return books;
+    public List<BookResponseDTO> getAllBook(){
+        List<Book> books = bookServiceImp.findAllBook();
+        return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDto> detail(@PathVariable Long id){
-        Optional<Book> optional = bookRepository.findById(id);
+    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable Long bookId){
+        Optional<Book> optional = bookServiceImp.findBookById(bookId);
         if(optional.isPresent()){
-            return ResponseEntity.ok(new BookDto(optional.get()));
+            return ResponseEntity.ok(new BookResponseDTO(optional.get()));
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> add(@RequestBody @Valid BookForm form, UriComponentsBuilder uriBuilder){
-        Book book = form.convert(userRepository);
-        bookRepository.save(book);
+    public ResponseEntity<BookResponseDTO> addBook(@RequestBody @Valid BookRequestDTO bookDTO, UriComponentsBuilder uriBuilder){
+        Book book = bookServiceImp.createBook(bookDTO);
 
         URI uri = uriBuilder.path("/books/{id}").buildAndExpand(book.getId()).toUri();
-        return ResponseEntity.created(uri).body(new BookDto(book));
+        return ResponseEntity.created(uri).body(new BookResponseDTO(book));
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<BookDto> update(@PathVariable Long id, @RequestBody @Valid BookForm form){
-        Optional<Book> optional = bookRepository.findById(id);
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequestDTO bookDTO){
+        Optional<Book> optional = bookServiceImp.findBookById(bookId);
         if(optional.isPresent()){
-            Book book = form.update(id, bookRepository, userRepository);
-            return ResponseEntity.ok(new BookDto(book));
+            Book book = bookServiceImp.updateBook(bookId, bookDTO);
+            return ResponseEntity.ok(new BookResponseDTO(book));
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDto> destroy(@PathVariable Long id){
-        Optional<Book> optional = bookRepository.findById(id);
+    public ResponseEntity<BookRequestDTO> destroyBook(@PathVariable Long bookId){
+        Optional<Book> optional = bookServiceImp.findBookById(bookId);
         if(optional.isPresent()){
-            bookRepository.deleteById(id);
+            bookServiceImp.deleteBookById(bookId);
             return ResponseEntity.ok().build();
         }
         

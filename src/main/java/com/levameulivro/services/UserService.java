@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> findAllUser();
-    Optional<User> findUserById(Long id);
-    User createUser(UserRequestDTO userDto);
+    Optional<User> findUserById(Long userId);
+    User createUser(UserRequestDTO userDTO);
     User updateUser(Long userId, UserRequestDTO userDTO);
     void deleteUserById(Long userId);
 }

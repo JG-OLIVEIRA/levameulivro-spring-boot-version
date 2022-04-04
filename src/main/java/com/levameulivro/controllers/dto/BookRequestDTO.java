@@ -3,6 +3,8 @@ package com.levameulivro.controllers.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.levameulivro.models.Book;
+
 import org.hibernate.validator.constraints.Length;
 
 public class BookRequestDTO{
@@ -13,6 +15,12 @@ public class BookRequestDTO{
     private String name;
     @NotNull @NotEmpty @Length(min = 5)
     private String author;
+
+    public BookRequestDTO(Book book){
+        this.ownername = book.getOwner().getName();
+        this.name = book.getName();
+        this.author = book.getAuthor();
+    }
 
     public String getOwnername() {
         return ownername;
