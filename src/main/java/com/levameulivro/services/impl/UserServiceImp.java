@@ -1,6 +1,6 @@
 package com.levameulivro.services.impl;
 
-import com.levameulivro.controllers.dto.UserRequestDTO;
+import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.models.User;
 import com.levameulivro.repository.UserRepository;
 import com.levameulivro.services.UserService;

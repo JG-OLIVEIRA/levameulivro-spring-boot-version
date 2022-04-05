@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.levameulivro.controllers.dto.BookRequestDTO;
-import com.levameulivro.controllers.dto.BookResponseDTO;
+import com.levameulivro.dto.BookRequestDTO;
+import com.levameulivro.dto.BookResponseDTO;
 import com.levameulivro.models.Book;
 
 import javax.transaction.Transactional;

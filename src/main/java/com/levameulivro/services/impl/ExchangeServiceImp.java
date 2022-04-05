@@ -1,6 +1,6 @@
 package com.levameulivro.services.impl;
 
-import com.levameulivro.controllers.dto.ExchangeRequestDTO;
+import com.levameulivro.dto.ExchangeRequestDTO;
 import com.levameulivro.models.Book;
 import com.levameulivro.models.Exchange;
 import com.levameulivro.models.User;

@@ -1,6 +1,6 @@
 package com.levameulivro.services;
 
-import com.levameulivro.controllers.dto.UserRequestDTO;
+import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.models.User;
 
 import java.util.List;

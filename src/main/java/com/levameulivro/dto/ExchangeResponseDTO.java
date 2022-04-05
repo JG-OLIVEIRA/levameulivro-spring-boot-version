@@ -1,4 +1,4 @@
-package com.levameulivro.controllers.dto;
+package com.levameulivro.dto;
 
 import com.levameulivro.models.Exchange;
 

@@ -1,4 +1,4 @@
-package com.levameulivro.controllers.dto;
+package com.levameulivro.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

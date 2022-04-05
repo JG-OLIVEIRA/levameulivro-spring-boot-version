@@ -3,7 +3,7 @@ package com.levameulivro.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.levameulivro.controllers.dto.ExchangeRequestDTO;
+import com.levameulivro.dto.ExchangeRequestDTO;
 import com.levameulivro.models.Exchange;
 
 public interface ExchangeService {

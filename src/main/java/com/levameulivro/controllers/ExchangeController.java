@@ -1,7 +1,7 @@
 package com.levameulivro.controllers;
 
-import com.levameulivro.controllers.dto.ExchangeRequestDTO;
-import com.levameulivro.controllers.dto.ExchangeResponseDTO;
+import com.levameulivro.dto.ExchangeRequestDTO;
+import com.levameulivro.dto.ExchangeResponseDTO;
 import com.levameulivro.models.Exchange;
 import com.levameulivro.services.impl.ExchangeServiceImp;
 

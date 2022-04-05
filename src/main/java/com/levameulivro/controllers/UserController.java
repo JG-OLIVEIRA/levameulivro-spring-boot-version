@@ -1,5 +1,7 @@
 package com.levameulivro.controllers;
 
+import com.levameulivro.dto.UserRequestDTO;
+import com.levameulivro.dto.UserResponseDTO;
 import com.levameulivro.models.User;
 
 import java.net.URI;
@@ -10,8 +12,6 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.levameulivro.controllers.dto.UserRequestDTO;
-import com.levameulivro.controllers.dto.UserResponseDTO;
 import com.levameulivro.services.impl.UserServiceImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
