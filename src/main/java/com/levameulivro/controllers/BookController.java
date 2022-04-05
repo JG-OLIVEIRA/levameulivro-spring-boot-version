@@ -34,7 +34,7 @@ public class BookController {
     private BookServiceImp bookServiceImp;
 
     @GetMapping
-    public List<BookResponseDTO> getAllBook(){
+    public List<BookResponseDTO> getAllBooks(){
         List<Book> books = bookServiceImp.findAllBook();
         return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }

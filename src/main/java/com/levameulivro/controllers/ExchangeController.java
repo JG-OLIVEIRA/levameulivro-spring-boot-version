@@ -32,7 +32,7 @@ public class ExchangeController {
     private ExchangeServiceImp exchangeServiceImp;
 
     @GetMapping
-    public List<ExchangeResponseDTO> getAllExchange(){
+    public List<ExchangeResponseDTO> getAllExchanges(){
         List<Exchange> exchanges = exchangeServiceImp.findAllExchange();
         return exchanges.stream().map(ExchangeResponseDTO::new).collect(Collectors.toList());
     }
