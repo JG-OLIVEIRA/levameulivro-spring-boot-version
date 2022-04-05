@@ -11,6 +11,7 @@ public class ExchangeRequestDTO {
     
     @NotNull @NotEmpty @Length(min = 5)
     private String nameBook;
+    @NotNull @NotEmpty
     private String recipient;
 
     public ExchangeRequestDTO(Exchange exchange){
