@@ -39,7 +39,7 @@ public class UserController {
         return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId){
         Optional<User> optional = userServiceImp.findUserById(userId);
         if(optional.isPresent()){
@@ -53,11 +53,11 @@ public class UserController {
     public ResponseEntity<UserRequestDTO> addUser(@RequestBody @Valid UserRequestDTO userDTO, UriComponentsBuilder uriBuilder){
         User user = userServiceImp.createUser(userDTO);
 
-        URI uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
+        URI uri = uriBuilder.path("/users/{userId}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserRequestDTO(user));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     @Transactional
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody @Valid UserRequestDTO userDTO){
         Optional<User> optional = userServiceImp.findUserById(userId);
@@ -69,7 +69,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<UserRequestDTO> destroyUser(@PathVariable Long userId){
         Optional<User> optional = userServiceImp.findUserById(userId);
         if(optional.isPresent()){

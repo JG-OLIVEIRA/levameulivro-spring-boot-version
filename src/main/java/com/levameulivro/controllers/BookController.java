@@ -39,7 +39,7 @@ public class BookController {
         return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{bookId}")
     public ResponseEntity<BookResponseDTO> getBookById(@PathVariable Long bookId){
         Optional<Book> optional = bookServiceImp.findBookById(bookId);
         if(optional.isPresent()){
@@ -53,11 +53,11 @@ public class BookController {
     public ResponseEntity<BookResponseDTO> addBook(@RequestBody @Valid BookRequestDTO bookDTO, UriComponentsBuilder uriBuilder){
         Book book = bookServiceImp.createBook(bookDTO);
 
-        URI uri = uriBuilder.path("/books/{id}").buildAndExpand(book.getId()).toUri();
+        URI uri = uriBuilder.path("/books/{bookId}").buildAndExpand(book.getId()).toUri();
         return ResponseEntity.created(uri).body(new BookResponseDTO(book));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{bookId}")
     @Transactional
     public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequestDTO bookDTO){
         Optional<Book> optional = bookServiceImp.findBookById(bookId);
@@ -69,7 +69,7 @@ public class BookController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<BookRequestDTO> destroyBook(@PathVariable Long bookId){
         Optional<Book> optional = bookServiceImp.findBookById(bookId);
         if(optional.isPresent()){

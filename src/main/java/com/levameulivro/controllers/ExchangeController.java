@@ -1,15 +1,14 @@
 package com.levameulivro.controllers;
 
-import com.levameulivro.controllers.dto.ExchangeDto;
-import com.levameulivro.form.ExchangeForm;
+import com.levameulivro.controllers.dto.ExchangeRequestDTO;
+import com.levameulivro.controllers.dto.ExchangeResponseDTO;
 import com.levameulivro.models.Exchange;
-import com.levameulivro.repository.BookRepository;
-import com.levameulivro.repository.ExchangeRepository;
-import com.levameulivro.repository.UserRepository;
+import com.levameulivro.services.impl.ExchangeServiceImp;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -28,59 +27,51 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping(value = "/exchanges")
 public class ExchangeController {
-    
-    @Autowired
-    private BookRepository bookRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-
-    @Autowired
-    private ExchangeRepository exchangeRepository;
+    private ExchangeServiceImp exchangeServiceImp;
 
     @GetMapping
-    public List<Exchange> show(){
-        List<Exchange> exchanges = exchangeRepository.findAll();
-        return exchanges;
+    public List<ExchangeResponseDTO> getAllExchange(){
+        List<Exchange> exchanges = exchangeServiceImp.findAllExchange();
+        return exchanges.stream().map(ExchangeResponseDTO::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ExchangeDto> detail(@PathVariable Long id){
-        Optional<Exchange> optional = exchangeRepository.findById(id);
+    @GetMapping("/{exchangeId}")
+    public ResponseEntity<ExchangeResponseDTO> getExchangeById(@PathVariable Long exchangeId){
+        Optional<Exchange> optional = exchangeServiceImp.findExchangeById(exchangeId);
         if(optional.isPresent()){
-            return ResponseEntity.ok(new ExchangeDto(optional.get()));
+            return ResponseEntity.ok(new ExchangeResponseDTO(optional.get()));
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<ExchangeDto> add(@RequestBody @Valid ExchangeForm form, UriComponentsBuilder uriBuilder){
-        Exchange exchange = form.convert(bookRepository, userRepository);
-        exchangeRepository.save(exchange);
+    public ResponseEntity<ExchangeResponseDTO> addExchange(@RequestBody @Valid ExchangeRequestDTO exchangeDTO, UriComponentsBuilder uriBuilder){
+        Exchange exchange = exchangeServiceImp.createExchange(exchangeDTO);
 
-        URI uri = uriBuilder.path("/books/{id}").buildAndExpand(exchange.getId()).toUri();
-        return ResponseEntity.created(uri).body(new ExchangeDto(exchange));
+        URI uri = uriBuilder.path("/books/{bookId}").buildAndExpand(exchange.getId()).toUri();
+        return ResponseEntity.created(uri).body(new ExchangeResponseDTO(exchange));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{exchangeId}")
     @Transactional
-    public ResponseEntity<ExchangeDto> update(@PathVariable Long id, @RequestBody @Valid ExchangeForm form){
-        Optional<Exchange> optional = exchangeRepository.findById(id);
+    public ResponseEntity<ExchangeResponseDTO> updateExchange(@PathVariable Long exchangeId, @RequestBody @Valid ExchangeRequestDTO exchangeDTO){
+        Optional<Exchange> optional = exchangeServiceImp.findExchangeById(exchangeId);
         if(optional.isPresent()){
-            Exchange exchange = form.update(id, exchangeRepository, bookRepository, userRepository);
-            return ResponseEntity.ok(new ExchangeDto(exchange));
+            Exchange exchange = exchangeServiceImp.updateExchange(exchangeId, exchangeDTO);
+            return ResponseEntity.ok(new ExchangeResponseDTO(exchange));
         }
 
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ExchangeDto> destroy(@PathVariable Long id){
-        Optional<Exchange> optional = exchangeRepository.findById(id);
+    @DeleteMapping("/{exchangeId}")
+    public ResponseEntity<ExchangeResponseDTO> destroyExchangeById(@PathVariable Long exchangeId){
+        Optional<Exchange> optional = exchangeServiceImp.findExchangeById(exchangeId);
         if(optional.isPresent()){
-            bookRepository.deleteById(id);
+            exchangeServiceImp.deleteExchangeById(exchangeId);
             return ResponseEntity.ok().build();
         }
         
