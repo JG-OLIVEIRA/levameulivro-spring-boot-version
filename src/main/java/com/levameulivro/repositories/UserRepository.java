@@ -1,4 +1,4 @@
-package com.levameulivro.repository;
+package com.levameulivro.repositories;
 
 import com.levameulivro.models.User;
 

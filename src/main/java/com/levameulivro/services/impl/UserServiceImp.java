@@ -2,7 +2,7 @@ package com.levameulivro.services.impl;
 
 import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.models.User;
-import com.levameulivro.repository.UserRepository;
+import com.levameulivro.repositories.UserRepository;
 import com.levameulivro.services.UserService;
 
 import java.util.List;

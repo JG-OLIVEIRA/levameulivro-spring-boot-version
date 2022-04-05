@@ -4,9 +4,9 @@ import com.levameulivro.dto.ExchangeRequestDTO;
 import com.levameulivro.models.Book;
 import com.levameulivro.models.Exchange;
 import com.levameulivro.models.User;
-import com.levameulivro.repository.BookRepository;
-import com.levameulivro.repository.ExchangeRepository;
-import com.levameulivro.repository.UserRepository;
+import com.levameulivro.repositories.BookRepository;
+import com.levameulivro.repositories.ExchangeRepository;
+import com.levameulivro.repositories.UserRepository;
 import com.levameulivro.services.ExchangeService;
 
 import java.util.List;

@@ -1,13 +1,14 @@
 package com.levameulivro.services.impl;
 
 import com.levameulivro.models.User;
+import com.levameulivro.repositories.BookRepository;
+import com.levameulivro.repositories.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 
 import com.levameulivro.dto.BookRequestDTO;
 import com.levameulivro.models.Book;
-import com.levameulivro.repository.BookRepository;
-import com.levameulivro.repository.UserRepository;
 import com.levameulivro.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
