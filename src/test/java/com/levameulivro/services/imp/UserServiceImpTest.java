@@ -1,5 +1,10 @@
 package com.levameulivro.services.imp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import java.util.Optional;
 
 import com.levameulivro.dto.UserRequestDTO;
@@ -7,7 +12,6 @@ import com.levameulivro.models.User;
 import com.levameulivro.repositories.UserRepository;
 import com.levameulivro.services.impl.UserServiceImp;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -46,11 +50,15 @@ class UserServiceImpTest {
 
     @Test
     void whenFindByIdThenReturnAnUserInstance(){
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(optionalUser);
+        when(userRepository.findById(anyLong())).thenReturn(optionalUser);
 
         Optional<User> response = service.findUserById(ID);
 
-        Assertions.assertEquals(User.class, response.get().getClass());
+        assertNotNull(response);
+        assertEquals(User.class, response.get().getClass());
+        assertEquals(ID, response.get().getId());
+        assertEquals(NAME, response.get().getName());
+        assertEquals(EMAIL, response.get().getEmail());
     }
 
     private void startUser(){
