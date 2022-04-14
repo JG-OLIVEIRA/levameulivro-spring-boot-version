@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +32,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User createUser(UserRequestDTO userDTO){
+        findByEmail(userDTO);
         User user = new User();
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
@@ -49,6 +51,13 @@ public class UserServiceImp implements UserService {
             return userRepository.save(user);
         }
         return null;
+    }
+
+    public void findByEmail(UserRequestDTO userDTO){
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+        if(user.isPresent() && !user.get().getId().equals(userDTO.getId())){
+            throw new DataIntegrityViolationException("Email já cadastrado");
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 public class UserRequestDTO {
     
+    private Long id;
     @NotNull @NotEmpty @Length(min = 3)
     private String name;
     @NotNull @NotEmpty
@@ -17,9 +18,18 @@ public class UserRequestDTO {
     private String password;
 
     public UserRequestDTO(User user){
+        this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
         this.password = user.getPassword();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
