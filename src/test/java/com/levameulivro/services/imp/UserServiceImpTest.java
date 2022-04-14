@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @SpringBootTest(classes={LevameulivroApplication.class})
 class UserServiceImpTest {
@@ -107,6 +108,19 @@ class UserServiceImpTest {
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
         Assertions.assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException(){
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(2L);
+            userService.createUser(userRequestDTO);
+        } catch (Exception ex){
+            Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            Assertions.assertEquals("Email já cadastrado", ex.getMessage());
+        }
     }
 
     private void startUser(){
