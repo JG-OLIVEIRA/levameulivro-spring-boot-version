@@ -6,7 +6,6 @@ import com.levameulivro.models.User;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -41,12 +40,13 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId){
-        Optional<User> optional = userServiceImp.findUserById(userId);
-        if(optional.isPresent()){
-            return ResponseEntity.ok(new UserResponseDTO(optional.get()));
+        try{
+            User user = userServiceImp.findUserById(userId);
+            return ResponseEntity.ok(new UserResponseDTO(user));
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -60,24 +60,23 @@ public class UserController {
     @PutMapping("/{userId}")
     @Transactional
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody @Valid UserRequestDTO userDTO){
-        Optional<User> optional = userServiceImp.findUserById(userId);
-        if(optional.isPresent()){
+        try{
             User user = userServiceImp.updateUser(userId, userDTO);
             return ResponseEntity.ok(new UserResponseDTO(user));
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<UserRequestDTO> destroyUser(@PathVariable Long userId){
-        Optional<User> optional = userServiceImp.findUserById(userId);
-        if(optional.isPresent()){
+        try{
             userServiceImp.deleteUserById(userId);
             return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
         }
         
-        return ResponseEntity.notFound().build();
     }
 
 }

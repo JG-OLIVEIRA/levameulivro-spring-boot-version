@@ -1,17 +1,15 @@
 package com.levameulivro.services.imp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-
 import java.util.Optional;
 
+import com.levameulivro.LevameulivroApplication;
 import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.models.User;
 import com.levameulivro.repositories.UserRepository;
+import com.levameulivro.services.exceptions.ObjectNotFoundException;
 import com.levameulivro.services.impl.UserServiceImp;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,9 +18,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes={LevameulivroApplication.class})
 class UserServiceImpTest {
     
+    private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado";
+
     private static final Long ID = 1L;
 
     private static final String NAME = "Jorge Gonçalves de Oliveira";
@@ -32,7 +32,7 @@ class UserServiceImpTest {
     private static final String PASSWORD = "password";
 
     @InjectMocks
-    private UserServiceImp service;
+    private UserServiceImp userService;
 
     @Mock
     private UserRepository userRepository;
@@ -50,15 +50,29 @@ class UserServiceImpTest {
 
     @Test
     void whenFindByIdThenReturnAnUserInstance(){
-        when(userRepository.findById(anyLong())).thenReturn(optionalUser);
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(optionalUser);
 
-        Optional<User> response = service.findUserById(ID);
+        User response = userService.findUserById(ID);
 
-        assertNotNull(response);
-        assertEquals(User.class, response.get().getClass());
-        assertEquals(ID, response.get().getId());
-        assertEquals(NAME, response.get().getName());
-        assertEquals(EMAIL, response.get().getEmail());
+    
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(User.class, response.getClass());
+        Assertions.assertEquals(ID, response.getId());
+        Assertions.assertEquals(NAME, response.getName());
+        Assertions.assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException(OBJETO_NÃO_ENCONTRADO));
+
+        try {
+            userService.findUserById(ID);
+        } catch (Exception ex){
+            Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
+            Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
+        }
     }
 
     private void startUser(){

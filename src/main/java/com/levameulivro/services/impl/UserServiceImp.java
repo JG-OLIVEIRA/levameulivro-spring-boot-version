@@ -4,6 +4,7 @@ import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.models.User;
 import com.levameulivro.repositories.UserRepository;
 import com.levameulivro.services.UserService;
+import com.levameulivro.services.exceptions.ObjectNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +24,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(Long userId){
+    public User findUserById(Long userId){
         Optional<User> user = userRepository.findById(userId);
-        return user;
+        return user.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
     @Override
