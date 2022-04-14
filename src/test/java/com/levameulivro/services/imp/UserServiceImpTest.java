@@ -1,5 +1,6 @@
 package com.levameulivro.services.imp;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.levameulivro.LevameulivroApplication;
@@ -21,6 +22,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes={LevameulivroApplication.class})
 class UserServiceImpTest {
     
+    private static final int INDEX = 0;
+
     private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado";
 
     private static final Long ID = 1L;
@@ -73,6 +76,22 @@ class UserServiceImpTest {
             Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
             Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
         }
+    }
+
+    @Test
+    void whenFindAllThenReturnAnListOfUsers(){
+        Mockito.when(userRepository.findAll()).thenReturn(List.of(user));
+
+        List<User> response = userService.findAllUser();
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(1, response.size());
+        Assertions.assertEquals(User.class, response.get(INDEX).getClass());
+
+        Assertions.assertEquals(ID, response.get(INDEX).getId());
+        Assertions.assertEquals(NAME, response.get(INDEX).getName());
+        Assertions.assertEquals(EMAIL, response.get(INDEX).getEmail());
+        Assertions.assertEquals(PASSWORD, response.get(INDEX).getPassword());
     }
 
     private void startUser(){
