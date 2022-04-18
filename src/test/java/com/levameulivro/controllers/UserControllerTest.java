@@ -1,23 +1,24 @@
 package com.levameulivro.controllers;
 
+import java.util.List;
+
 import com.levameulivro.LevameulivroApplication;
-import com.levameulivro.dto.UserRequestDTO;
+import com.levameulivro.dto.UserResponseDTO;
 import com.levameulivro.models.User;
 import com.levameulivro.services.impl.UserServiceImp;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes={LevameulivroApplication.class})
 public class UserControllerTest {
-
-    private static final String EMAIL_JÁ_CADASTRADO = "Email já cadastrado";
-
-    private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado";
 
     private static final Long ID = 1L;
 
@@ -27,7 +28,6 @@ public class UserControllerTest {
 
     private static final String PASSWORD = "password";
 
-    private static final int INDEX = 0;
 
     @InjectMocks
     private UserController userController;
@@ -36,7 +36,7 @@ public class UserControllerTest {
     private UserServiceImp userServiceImp;
 
     private User user;
-    private UserRequestDTO userRequestDTO;
+    private UserResponseDTO userResponseDTO;
 
     @BeforeEach
     void setUp(){
@@ -56,13 +56,24 @@ public class UserControllerTest {
     }
 
     @Test
-    void testGetAllUser() {
-
+    void whenGetAllUserThenReturnAListOfUserResponseDTO() {
+        Mockito.when(userServiceImp.findAllUser()).thenReturn(List.of(user));
     }
 
     @Test
-    void testGetUserById() {
+    void whenGetUserByIdThenReturnSucess() {
+        Mockito.when(userServiceImp.findUserById(Mockito.anyLong())).thenReturn(user);
+        
+        ResponseEntity<UserResponseDTO> response = userController.getUserById(ID);
 
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(UserResponseDTO.class, response.getBody().getClass());
+
+        Assertions.assertEquals(ID, response.getBody().getId());
+        Assertions.assertEquals(NAME, response.getBody().getName());
+        Assertions.assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     @Test
@@ -72,6 +83,6 @@ public class UserControllerTest {
 
     private void startUser(){
         user = new User(ID, NAME, EMAIL, PASSWORD);
-        userRequestDTO = new UserRequestDTO(user);
+        userResponseDTO = new UserResponseDTO(user);
     }
 }

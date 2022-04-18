@@ -40,7 +40,7 @@ class UserServiceImpTest {
     private static final int INDEX = 0;
 
     @InjectMocks
-    private UserServiceImp userService;
+    private UserServiceImp userServiceImp;
 
     @Mock
     private UserRepository userRepository;
@@ -60,7 +60,7 @@ class UserServiceImpTest {
     void whenFindByIdThenReturnAnUserInstance(){
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(optionalUser);
 
-        User response = userService.findUserById(ID);
+        User response = userServiceImp.findUserById(ID);
 
     
 
@@ -76,7 +76,7 @@ class UserServiceImpTest {
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException(OBJETO_NÃO_ENCONTRADO));
 
         try {
-            userService.findUserById(ID);
+            userServiceImp.findUserById(ID);
         } catch (Exception ex){
             Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
             Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
@@ -87,7 +87,7 @@ class UserServiceImpTest {
     void whenFindAllThenReturnAnListOfUsers(){
         Mockito.when(userRepository.findAll()).thenReturn(List.of(user));
 
-        List<User> response = userService.findAllUser();
+        List<User> response = userServiceImp.findAllUser();
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(User.class, response.get(INDEX).getClass());
@@ -102,7 +102,7 @@ class UserServiceImpTest {
     void whenCreateThenReturnSucess(){
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
-        User response = userService.createUser(userRequestDTO);
+        User response = userServiceImp.createUser(userRequestDTO);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(User.class, response.getClass());
@@ -119,7 +119,7 @@ class UserServiceImpTest {
 
         try{
             optionalUser.get().setId(2L);
-            userService.createUser(userRequestDTO);
+            userServiceImp.createUser(userRequestDTO);
         } catch (Exception ex){
             Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
             Assertions.assertEquals(EMAIL_JÁ_CADASTRADO, ex.getMessage());
@@ -130,7 +130,7 @@ class UserServiceImpTest {
     void whenUpdateThenReturnSucess(){
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
-        User response = userService.updateUser(userRequestDTO);
+        User response = userServiceImp.updateUser(userRequestDTO);
 
 
         Assertions.assertNotNull(response);
@@ -148,7 +148,7 @@ class UserServiceImpTest {
 
         try{
             optionalUser.get().setId(2L);
-            userService.createUser(userRequestDTO);
+            userServiceImp.createUser(userRequestDTO);
         } catch (Exception ex){
             Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
             Assertions.assertEquals(EMAIL_JÁ_CADASTRADO, ex.getMessage());
@@ -168,7 +168,7 @@ class UserServiceImpTest {
         Mockito.when(userRepository.findById(Mockito.anyLong()))
                     .thenThrow(new ObjectNotFoundException(OBJETO_NÃO_ENCONTRADO));
         try{
-            userService.deleteUserById(ID);
+            userServiceImp.deleteUserById(ID);
         } catch (Exception ex){
             Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
             Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
