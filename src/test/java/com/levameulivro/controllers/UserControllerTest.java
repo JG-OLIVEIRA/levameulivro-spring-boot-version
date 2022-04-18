@@ -1,5 +1,6 @@
 package com.levameulivro.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.levameulivro.LevameulivroApplication;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes={LevameulivroApplication.class})
@@ -28,6 +30,7 @@ public class UserControllerTest {
 
     private static final String PASSWORD = "password";
 
+    private static final int INDEX = 0;
 
     @InjectMocks
     private UserController userController;
@@ -58,6 +61,19 @@ public class UserControllerTest {
     @Test
     void whenGetAllUserThenReturnAListOfUserResponseDTO() {
         Mockito.when(userServiceImp.findAllUser()).thenReturn(List.of(user));
+
+        ResponseEntity<List<UserResponseDTO>> response = userController.getAllUser();
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(ArrayList.class, response.getBody().getClass());
+        Assertions.assertEquals(UserResponseDTO.class, response.getBody().get(INDEX).getClass());
+
+        Assertions.assertEquals(ID, response.getBody().get(INDEX).getId());
+        Assertions.assertEquals(NAME, response.getBody().get(INDEX).getName());
+        Assertions.assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
     }
 
     @Test

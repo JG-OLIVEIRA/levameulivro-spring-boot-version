@@ -33,9 +33,9 @@ public class UserController {
     private UserServiceImp userServiceImp;
 
     @GetMapping
-    public List<UserResponseDTO> getAllUser(){
-        List<User> users = userServiceImp.findAllUser();
-        return users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
+    public ResponseEntity<List<UserResponseDTO>> getAllUser(){
+        return ResponseEntity.ok().body(userServiceImp.findAllUser()
+            .stream().map(UserResponseDTO::new).collect(Collectors.toList()));
     }
 
     @GetMapping("/{userId}")
