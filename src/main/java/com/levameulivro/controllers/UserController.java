@@ -60,8 +60,10 @@ public class UserController {
     @PutMapping("/{userId}")
     @Transactional
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody @Valid UserRequestDTO userDTO){
+        userServiceImp.findUserById(userId);
+        userDTO.setId(userId);
         try{
-            User user = userServiceImp.updateUser(userId, userDTO);
+            User user = userServiceImp.updateUser(userDTO);
             return ResponseEntity.ok(new UserResponseDTO(user));
         } catch (Exception e){
             return ResponseEntity.notFound().build();

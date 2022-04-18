@@ -41,16 +41,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, UserRequestDTO userDTO){
-        Optional<User> optional = userRepository.findById(userId);
-        if(optional.isPresent()){
-            User user = optional.get();
-            user.setEmail(userDTO.getEmail());
-            user.setName(userDTO.getName());
-            user.setPassword(userDTO.getPassword());
-            return userRepository.save(user);
-        }
-        return null;
+    public User updateUser(UserRequestDTO userDTO){
+        findByEmail(userDTO);
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setEmail(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        user.setPassword(userDTO.getPassword());
+        return userRepository.save(user);
+
     }
 
     public void findByEmail(UserRequestDTO userDTO){

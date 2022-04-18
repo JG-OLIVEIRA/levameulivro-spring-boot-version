@@ -9,6 +9,6 @@ public interface UserService {
     List<User> findAllUser();
     User findUserById(Long userId);
     User createUser(UserRequestDTO userDTO);
-    User updateUser(Long userId, UserRequestDTO userDTO);
+    User updateUser(UserRequestDTO userDTO);
     void deleteUserById(Long userId);
 }

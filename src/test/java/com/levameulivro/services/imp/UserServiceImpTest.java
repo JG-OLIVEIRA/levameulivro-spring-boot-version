@@ -23,7 +23,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 @SpringBootTest(classes={LevameulivroApplication.class})
 class UserServiceImpTest {
     
-    private static final int INDEX = 0;
+    private static final String EMAIL_JÁ_CADASTRADO = "Email já cadastrado";
 
     private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado";
 
@@ -34,6 +34,8 @@ class UserServiceImpTest {
     private static final String EMAIL = "dody60314@gmail.com";
 
     private static final String PASSWORD = "password";
+
+    private static final int INDEX = 0;
 
     @InjectMocks
     private UserServiceImp userService;
@@ -86,7 +88,6 @@ class UserServiceImpTest {
         List<User> response = userService.findAllUser();
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(1, response.size());
         Assertions.assertEquals(User.class, response.get(INDEX).getClass());
 
         Assertions.assertEquals(ID, response.get(INDEX).getId());
@@ -119,7 +120,36 @@ class UserServiceImpTest {
             userService.createUser(userRequestDTO);
         } catch (Exception ex){
             Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            Assertions.assertEquals("Email já cadastrado", ex.getMessage());
+            Assertions.assertEquals(EMAIL_JÁ_CADASTRADO, ex.getMessage());
+        }
+    }
+
+    @Test
+    void whenUpdateThenReturnSucess(){
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        User response = userService.updateUser(userRequestDTO);
+
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(User.class, response.getClass());
+        
+        Assertions.assertEquals(ID, response.getId());
+        Assertions.assertEquals(NAME, response.getName());
+        Assertions.assertEquals(EMAIL, response.getEmail());
+        Assertions.assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenUpdateThenReturnAnDataIntegrityViolationException(){
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(2L);
+            userService.createUser(userRequestDTO);
+        } catch (Exception ex){
+            Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            Assertions.assertEquals(EMAIL_JÁ_CADASTRADO, ex.getMessage());
         }
     }
 
