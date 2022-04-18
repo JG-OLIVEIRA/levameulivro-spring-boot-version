@@ -1,5 +1,7 @@
 package com.levameulivro.services.imp;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -151,6 +153,14 @@ class UserServiceImpTest {
             Assertions.assertEquals(DataIntegrityViolationException.class, ex.getClass());
             Assertions.assertEquals(EMAIL_JÁ_CADASTRADO, ex.getMessage());
         }
+    }
+
+    @Test
+    void deleteWithSucess(){
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(optionalUser);
+        Mockito.doNothing().when(userRepository).deleteById(Mockito.anyLong());
+        userRepository.deleteById(ID);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(anyLong());
     }
 
     private void startUser(){
