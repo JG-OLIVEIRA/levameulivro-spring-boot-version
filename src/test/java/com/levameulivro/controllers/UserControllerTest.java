@@ -100,8 +100,20 @@ public class UserControllerTest {
     }
 
     @Test
-    void testUpdateUser() {
+    void whenUpdateThenReturnSucess() {
+        Mockito.when(userServiceImp.updateUser(userRequestDTO)).thenReturn(user);
 
+        ResponseEntity<UserResponseDTO> response = userController.updateUser(ID, userRequestDTO);
+        
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(UserResponseDTO.class, response.getBody().getClass());
+
+        Assertions.assertEquals(ID, response.getBody().getId());
+        Assertions.assertEquals(NAME, response.getBody().getName());
+        Assertions.assertEquals(EMAIL, response.getBody().getEmail());
     }
 
     private void startUser(){
