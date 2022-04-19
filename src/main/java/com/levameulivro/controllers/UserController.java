@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = ID)
-    public ResponseEntity<UserRequestDTO> destroyUser(@PathVariable Long userId){
+    public ResponseEntity<UserResponseDTO> destroyUser(@PathVariable Long userId){
         try{
             userServiceImp.deleteUserById(userId);
             return ResponseEntity.ok().build();

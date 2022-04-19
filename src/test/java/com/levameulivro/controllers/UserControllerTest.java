@@ -1,5 +1,7 @@
 package com.levameulivro.controllers;
 
+import static org.mockito.Mockito.times;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +63,15 @@ public class UserControllerTest {
     }
 
     @Test
-    void testDestroyUser() {
+    void whenDestroyThenReturnSucess() {
+        Mockito.doNothing().when(userServiceImp).deleteUserById(Mockito.anyLong());
 
+        ResponseEntity<UserResponseDTO> response = userController.destroyUser(ID);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Mockito.verify(userServiceImp, times(1)).deleteUserById(Mockito.anyLong());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
     @Test
