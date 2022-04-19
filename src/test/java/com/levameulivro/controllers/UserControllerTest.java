@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.levameulivro.LevameulivroApplication;
+import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.dto.UserResponseDTO;
 import com.levameulivro.models.User;
 import com.levameulivro.services.impl.UserServiceImp;
@@ -39,7 +40,7 @@ public class UserControllerTest {
     private UserServiceImp userServiceImp;
 
     private User user;
-    private UserResponseDTO userResponseDTO;
+    private UserRequestDTO userRequestDTO;
 
     @BeforeEach
     void setUp(){
@@ -49,8 +50,14 @@ public class UserControllerTest {
 
 
     @Test
-    void testAddUser() {
+    void whenAddUserThenReturnAdded() {
+        Mockito.when(userServiceImp.createUser(Mockito.any())).thenReturn(user);
 
+        ResponseEntity<UserResponseDTO> response = userController.addUser(userRequestDTO);
+
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Assertions.assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
@@ -99,6 +106,6 @@ public class UserControllerTest {
 
     private void startUser(){
         user = new User(ID, NAME, EMAIL, PASSWORD);
-        userResponseDTO = new UserResponseDTO(user);
+        userRequestDTO = new UserRequestDTO(user);
     }
 }

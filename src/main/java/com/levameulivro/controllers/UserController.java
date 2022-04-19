@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
+
+    private static final String ID = "/{userId}";
 
     @Autowired
     private UserServiceImp userServiceImp;
@@ -38,7 +40,7 @@ public class UserController {
             .stream().map(UserResponseDTO::new).collect(Collectors.toList()));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(value = ID)
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId){
         try{
             User user = userServiceImp.findUserById(userId);
@@ -50,14 +52,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserRequestDTO> addUser(@RequestBody @Valid UserRequestDTO userDTO, UriComponentsBuilder uriBuilder){
-        User user = userServiceImp.createUser(userDTO);
+    public ResponseEntity<UserResponseDTO> addUser(@RequestBody @Valid UserRequestDTO userDTO){
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID).buildAndExpand(userServiceImp.createUser(userDTO).getId()).toUri();
 
-        URI uri = uriBuilder.path("/users/{userId}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UserRequestDTO(user));
+        return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping(value = ID)
     @Transactional
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody @Valid UserRequestDTO userDTO){
         userServiceImp.findUserById(userId);
@@ -70,7 +71,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping(value = ID)
     public ResponseEntity<UserRequestDTO> destroyUser(@PathVariable Long userId){
         try{
             userServiceImp.deleteUserById(userId);
