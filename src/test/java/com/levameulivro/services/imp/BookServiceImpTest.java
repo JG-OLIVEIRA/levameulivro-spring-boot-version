@@ -1,10 +1,13 @@
 package com.levameulivro.services.imp;
 
 import com.levameulivro.dto.BookRequestDTO;
+
+import java.util.List;
 import java.util.Optional;
 
 import com.levameulivro.LevameulivroApplication;
 import com.levameulivro.dto.UserRequestDTO;
+import com.levameulivro.exceptions.ObjectNotFoundException;
 import com.levameulivro.models.Book;
 import com.levameulivro.models.User;
 import com.levameulivro.repositories.BookRepository;
@@ -22,7 +25,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes={LevameulivroApplication.class})
 public class BookServiceImpTest {
 
+    private static final int INDEX = 0;
+
     private static final String NAME = "Harry Potter";
+
+    private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado";
+
     private static final String AUTHOR = "JK.ROWLING";
 
     private static final Long ID = 1L;
@@ -62,9 +70,40 @@ public class BookServiceImpTest {
         Assertions.assertEquals("password", response.getOwner().getPassword());
     }
 
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(bookRepository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException(OBJETO_NÃO_ENCONTRADO));
+
+        try{
+            bookServiceImp.findBookById(ID);
+        } catch (Exception ex){
+            Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
+            Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
+        }
+    }
+
+    @Test
+    void whenFindAllThenReturnAnListOfBooks(){
+        Mockito.when(bookRepository.findAll()).thenReturn(List.of(book));
+
+        List<Book> response = bookServiceImp.findAllBook();
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(Book.class, response.get(INDEX).getClass());
+
+        Assertions.assertEquals(ID, response.get(INDEX).getId());
+        Assertions.assertEquals(NAME, response.get(INDEX).getName());
+        Assertions.assertEquals(AUTHOR, response.get(INDEX).getAuthor());
+
+        Assertions.assertEquals("Jorge Gonçalves de Oliveira", response.get(INDEX).getOwner().getName());
+        Assertions.assertEquals("dody60314@gmail.com", response.get(INDEX).getOwner().getEmail());
+        Assertions.assertEquals("password", response.get(INDEX).getOwner().getPassword());
+    }
+
     private void startBook(){
         user = new User(ID, "Jorge Gonçalves de Oliveira", "dody60314@gmail.com", "password");
-        bookRequestDTO = new BookRequestDTO(new Book(ID, user, NAME, AUTHOR));
+        book = new Book(ID, user, NAME, AUTHOR);
+        bookRequestDTO = new BookRequestDTO(book);
         optionalBook = Optional.of(new Book(ID, user, NAME, AUTHOR));
     }
 }
