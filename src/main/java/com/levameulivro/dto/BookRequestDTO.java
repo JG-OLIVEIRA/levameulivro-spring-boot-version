@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 public class BookRequestDTO{
 
+    private Long id;
     @NotNull @NotEmpty @Length(min = 8)
     private String ownername;
     @NotNull @NotEmpty @Length(min = 5)
@@ -17,11 +18,20 @@ public class BookRequestDTO{
     private String author;
 
     public BookRequestDTO(Book book){
+        this.id = book.getId();
         this.ownername = book.getOwner().getName();
         this.name = book.getName();
         this.author = book.getAuthor();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getOwnername() {
         return ownername;
     }

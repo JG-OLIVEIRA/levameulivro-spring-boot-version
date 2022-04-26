@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.levameulivro.dto.BookRequestDTO;
 import com.levameulivro.models.Book;
 import com.levameulivro.services.BookService;
+import com.levameulivro.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public Optional<Book> findBookById(Long bookId){
+    public Book findBookById(Long bookId){
         Optional<Book> book = bookRepository.findById(bookId);
-        return book;
+        return book.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
     @Override

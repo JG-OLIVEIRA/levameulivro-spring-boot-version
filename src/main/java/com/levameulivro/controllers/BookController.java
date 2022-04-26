@@ -4,7 +4,6 @@ import com.levameulivro.services.impl.BookServiceImp;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.levameulivro.dto.BookRequestDTO;
@@ -29,6 +28,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping(value = "/books")
 public class BookController {
+
+    private static final String ID = "/{bookId}";
     
     @Autowired
     private BookServiceImp bookServiceImp;
@@ -39,14 +40,16 @@ public class BookController {
         return books.stream().map(BookResponseDTO::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/{bookId}")
+    @GetMapping(value = ID)
     public ResponseEntity<BookResponseDTO> getBookById(@PathVariable Long bookId){
-        Optional<Book> optional = bookServiceImp.findBookById(bookId);
-        if(optional.isPresent()){
-            return ResponseEntity.ok(new BookResponseDTO(optional.get()));
+        
+        try{
+            Book book = bookServiceImp.findBookById(bookId);
+            return ResponseEntity.ok(new BookResponseDTO(book));
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.notFound().build();
+        
     }
 
     @PostMapping
@@ -57,26 +60,27 @@ public class BookController {
         return ResponseEntity.created(uri).body(new BookResponseDTO(book));
     }
 
-    @PutMapping("/{bookId}")
+    @PutMapping(value = ID)
     @Transactional
     public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequestDTO bookDTO){
-        Optional<Book> optional = bookServiceImp.findBookById(bookId);
-        if(optional.isPresent()){
-            Book book = bookServiceImp.updateBook(bookId, bookDTO);
-            return ResponseEntity.ok(new BookResponseDTO(book));
-        }
-
-        return ResponseEntity.notFound().build();
+            bookServiceImp.findAllBook();
+            bookDTO.setId(bookId);
+            try{
+                Book book = bookServiceImp.updateBook(bookId, bookDTO);
+                return ResponseEntity.ok(new BookResponseDTO(book));
+            } catch (Exception e){
+                return ResponseEntity.notFound().build();
+            }
     }
 
-    @DeleteMapping("/{bookId}")
-    public ResponseEntity<BookRequestDTO> destroyBook(@PathVariable Long bookId){
-        Optional<Book> optional = bookServiceImp.findBookById(bookId);
-        if(optional.isPresent()){
+    @DeleteMapping(value = ID)
+    public ResponseEntity<BookResponseDTO> destroyBook(@PathVariable Long bookId){
+        try{
             bookServiceImp.deleteBookById(bookId);
             return ResponseEntity.ok().build();
+        } catch(Exception e){
+            return ResponseEntity.notFound().build();
         }
         
-        return ResponseEntity.notFound().build();
     }
 }
