@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.levameulivro.LevameulivroApplication;
-import com.levameulivro.dto.UserRequestDTO;
 import com.levameulivro.exceptions.ObjectNotFoundException;
 import com.levameulivro.models.Book;
 import com.levameulivro.models.User;
@@ -43,7 +42,6 @@ public class BookServiceImpTest {
 
     private User user;
     private Book book;
-    private UserRequestDTO userRequestDTO;
     private BookRequestDTO bookRequestDTO;
     private Optional<Book> optionalBook;
 
@@ -97,7 +95,24 @@ public class BookServiceImpTest {
 
         Assertions.assertEquals("Jorge Gonçalves de Oliveira", response.get(INDEX).getOwner().getName());
         Assertions.assertEquals("dody60314@gmail.com", response.get(INDEX).getOwner().getEmail());
-        Assertions.assertEquals("password", response.get(INDEX).getOwner().getPassword());
+    }
+
+    @Test
+    void whenCreateThenReturnSucess(){
+        Mockito.when(bookRepository.save(Mockito.any())).thenReturn(book);
+
+        Book response = bookServiceImp.createBook(bookRequestDTO);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(Book.class, response.getClass());
+
+
+        Assertions.assertEquals("Jorge Gonçalves de Oliveira", response.getOwner().getName());
+        Assertions.assertEquals("dody60314@gmail.com", response.getOwner().getEmail());
+
+        Assertions.assertEquals(ID, response.getId());
+        Assertions.assertEquals(NAME, response.getName());
+        Assertions.assertEquals(AUTHOR, response.getAuthor());
     }
 
     private void startBook(){
